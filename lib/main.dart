@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_contanct/infrastructure/app_state_container.dart';
-import 'package:flutter_qr_contanct/pages/main_view.dart';
+import 'package:flutter_qr_contact/pages/main_view.dart';
 
-void main() => runApp(
-      AppStateContainer(
-        child: MyApp(),
-      ),
-    );
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override

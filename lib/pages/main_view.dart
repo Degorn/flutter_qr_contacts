@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_contanct/infrastructure/app_state_container.dart';
-import 'package:flutter_qr_contanct/infrastructure/providers/info_provider.dart';
-import 'package:flutter_qr_contanct/pages/qr_scan.dart';
-import 'package:flutter_qr_contanct/pages/qr_share.dart';
-import 'package:flutter_qr_contanct/pages/settings_view.dart';
+import 'package:flutter_qr_contact/infrastructure/providers/info_provider.dart';
+import 'package:flutter_qr_contact/pages/qr_scan.dart';
+import 'package:flutter_qr_contact/pages/qr_share.dart';
+import 'package:flutter_qr_contact/pages/settings_view.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -34,8 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildButtons() {
-    // final appState = AppStateContainer.of(context).state;
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
       child: Row(

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_contanct/models/contact_model.dart';
+import 'package:flutter_qr_contact/models/contact_model.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
 class QRScanPage extends StatefulWidget {

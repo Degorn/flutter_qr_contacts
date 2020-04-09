@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_contanct/infrastructure/app_state.dart';
-import 'package:flutter_qr_contanct/infrastructure/app_state_container.dart';
-import 'package:flutter_qr_contanct/infrastructure/providers/info_provider.dart';
-import 'package:flutter_qr_contanct/models/contact_model.dart';
+import 'package:flutter_qr_contact/infrastructure/providers/info_provider.dart';
+import 'package:flutter_qr_contact/models/contact_model.dart';
 
 class SettingsPage extends StatelessWidget {
   final TextEditingController nameTextController = TextEditingController();
@@ -12,11 +10,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = AppStateContainer.of(context).state;
-
-    // nameTextController.text = appState.model.name;
-    // phoneTextController.text = appState.model.phone;
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -24,13 +17,13 @@ class SettingsPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: buildBody(appState, context),
+          child: buildBody(context),
         ),
       ),
     );
   }
 
-  Widget buildBody(AppState appState, BuildContext context) {
+  Widget buildBody(BuildContext context) {
     // return Column(
     //   children: <Widget>[
     //     buildTextField(nameTextController, 'Name'),
@@ -59,18 +52,15 @@ class SettingsPage extends StatelessWidget {
             children: <Widget>[
               buildTextField(nameTextController, 'Name'),
               buildTextField(phoneTextController, 'Phone'),
-              buildSaveButton(appState, context),
+              buildSaveButton(context),
             ],
           );
         });
   }
 
-  Widget buildSaveButton(AppState appState, BuildContext context) {
+  Widget buildSaveButton(BuildContext context) {
     return RaisedButton(
       onPressed: () {
-        // appState.model.name = nameTextController.text;
-        // appState.model.phone = phoneTextController.text;
-
         var jsonEncoded = jsonEncode((ContactModel()
               ..name = nameTextController.text
               ..phone = phoneTextController.text)

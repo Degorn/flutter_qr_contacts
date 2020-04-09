@@ -1,4 +1,4 @@
-package com.example.flutter_qr_contanct
+package com.example.flutter_qr_contact
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

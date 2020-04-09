@@ -1,4 +1,4 @@
-# flutter_qr_contanct
+# flutter_qr_contact
 
 A new Flutter project.
 
