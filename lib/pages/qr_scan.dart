@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_contanct/infrastructure/app_state_container.dart';
 import 'package:flutter_qr_contanct/models/contact_model.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -20,28 +19,11 @@ class _QRScanPageState extends State<QRScanPage> {
         child: Center(
           child: RaisedButton(
             child: Text('Scan'),
-            onPressed: () => simulateScan(context),
+            onPressed: () => scan(context),
           ),
         ),
       ),
     );
-  }
-
-  Future simulateScan(BuildContext context) async {
-    final barcode = jsonEncode((ContactModel()
-          ..name = 'TestName'
-          ..phone = '+375291234567')
-        .toJson());
-
-    Map<String, dynamic> jsonD = jsonDecode(barcode);
-
-    if (jsonD != null) {
-      final result = ContactModel.fromJson(jsonD);
-
-      if (result != null) {
-        showSimpleCustomDialog(context, result);
-      }
-    }
   }
 
   Future scan(BuildContext context) async {

@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_qr_contanct/infrastructure/app_state_container.dart';
+import 'package:flutter_qr_contanct/infrastructure/providers/info_provider.dart';
 import 'package:flutter_qr_contanct/pages/qr_scan.dart';
 import 'package:flutter_qr_contanct/pages/qr_share.dart';
 import 'package:flutter_qr_contanct/pages/settings_view.dart';
@@ -30,6 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildButtons() {
+    // final appState = AppStateContainer.of(context).state;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 32),
       child: Row(
@@ -40,11 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Icons.chrome_reader_mode,
             () => navigateToPage(QRScanPage()),
           ),
-          buildButton(
-            'Share QR',
-            Icons.screen_share,
-            () => navigateToPage(QRSharePage()),
-          ),
+          FutureBuilder(
+              future: InforProvider.readInfo(),
+              builder: (_, AsyncSnapshot<String> snapshot) {
+                var dataToShare = '';
+                if (snapshot.data.isNotEmpty) {
+                  dataToShare = jsonEncode(snapshot.data);
+                }
+
+                return buildButton(
+                  'Share QR',
+                  Icons.screen_share,
+                  () => navigateToPage(QRSharePage(dataToShare)),
+                );
+              }),
         ],
       ),
     );
