@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_qr_contact/infrastructure/managers/dialog_manager.dart';
+import 'package:flutter_qr_contact/infrastructure/managers/qr_scan_manager.dart';
 import 'package:flutter_qr_contact/infrastructure/providers/info_provider.dart';
-import 'package:flutter_qr_contact/pages/qr_scan.dart';
+import 'package:flutter_qr_contact/models/contact_model.dart';
 import 'package:flutter_qr_contact/pages/qr_share.dart';
 import 'package:flutter_qr_contact/pages/settings_view.dart';
 
@@ -41,20 +41,20 @@ class _MyHomePageState extends State<MyHomePage> {
           buildButton(
             'Read QR',
             Icons.chrome_reader_mode,
-            () => navigateToPage(QRScanPage()),
+            () async => await QRScanManager.scan(context)
           ),
           FutureBuilder(
               future: InforProvider.readInfo(),
               builder: (_, AsyncSnapshot<String> snapshot) {
-                var dataToShare = '';
-                if (snapshot.data.isNotEmpty) {
-                  dataToShare = jsonEncode(snapshot.data);
-                }
+                var onPressed = snapshot.data.isNotEmpty
+                    ? () => navigateToPage(QRSharePage(snapshot.data))
+                    : () => DialogManager.showInformationDialog(
+                        context, 'You did\'t configure profile information');
 
                 return buildButton(
                   'Share QR',
                   Icons.screen_share,
-                  () => navigateToPage(QRSharePage(dataToShare)),
+                  onPressed,
                 );
               }),
         ],
@@ -87,11 +87,21 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: contacts.length,
               itemBuilder: (_, index) {
                 var contact = contacts.elementAt(index);
+                var contactModel = ContactModel(
+                    name: contact.displayName,
+                    phone: contact.phones.first.value.toString());
 
                 return Card(
                   child: ListTile(
-                    title: Text(contact.displayName),
-                    subtitle: Text(contact.phones.first.value.toString()),
+                    title: Text(contactModel.name),
+                    subtitle: Text(contactModel.phone),
+                    trailing: IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: () {
+                        navigateToPage(
+                            QRSharePage(contactModel.toStringJson()));
+                      },
+                    ),
                   ),
                 );
               },

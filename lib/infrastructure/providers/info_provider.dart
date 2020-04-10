@@ -18,6 +18,10 @@ class InforProvider {
   static Future<File> writeInfo(String data) async {
     final file = await _localFile;
 
+    if (data == null || data.isEmpty) {
+      return file.delete();
+    }
+
     return file.writeAsString('$data');
   }
 

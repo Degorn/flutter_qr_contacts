@@ -1,8 +1,10 @@
-class ContactModel {
-  String name;
-  String phone;
+import 'dart:convert';
 
-  ContactModel();
+class ContactModel {
+  final String name;
+  final String phone;
+
+  ContactModel({this.name, this.phone});
 
   ContactModel.fromJson(Map<String, dynamic> json)
       : name = json['name'],
@@ -12,4 +14,6 @@ class ContactModel {
         'name': name ?? "",
         'phone': phone ?? "",
       };
+
+  String toStringJson() => jsonEncode(toJson());
 }

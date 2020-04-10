@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_qr_contact/infrastructure/managers/dialog_manager.dart';
 import 'package:flutter_qr_contact/infrastructure/providers/info_provider.dart';
 import 'package:flutter_qr_contact/models/contact_model.dart';
 
@@ -24,27 +25,16 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    // return Column(
-    //   children: <Widget>[
-    //     buildTextField(nameTextController, 'Name'),
-    //     buildTextField(phoneTextController, 'Phone'),
-    //     buildSaveButton(appState, context),
-    //   ],
-    // );
-
     return FutureBuilder(
         future: InforProvider.readInfo(),
         builder: (_, AsyncSnapshot<String> snapshot) {
           if (snapshot.data.isNotEmpty) {
-            Map<String, dynamic> jsonD = jsonDecode(snapshot.data);
+            final jsonData = jsonDecode(snapshot.data);
+            final result = ContactModel.fromJson(jsonData);
 
-            if (jsonD.isNotEmpty) {
-              final result = ContactModel.fromJson(jsonD);
-
-              if (result != null) {
-                nameTextController.text = result.name;
-                phoneTextController.text = result.phone;
-              }
+            if (result != null) {
+              nameTextController.text = result?.name ?? '';
+              phoneTextController.text = result?.phone ?? '';
             }
           }
 
@@ -60,13 +50,21 @@ class SettingsPage extends StatelessWidget {
 
   Widget buildSaveButton(BuildContext context) {
     return RaisedButton(
-      onPressed: () {
-        var jsonEncoded = jsonEncode((ContactModel()
-              ..name = nameTextController.text
-              ..phone = phoneTextController.text)
-            .toJson());
+      onPressed: () async {
+        if (nameTextController.text.isEmpty ||
+            phoneTextController.text.isEmpty) {
+          await DialogManager.showInformationDialog(
+              context, 'All fields must be filled correctly.');
 
-        InforProvider.writeInfo(jsonEncoded);
+          return;
+        }
+
+        var infoJson = ContactModel(
+          name: nameTextController.text,
+          phone: phoneTextController.text,
+        ).toStringJson();
+
+        InforProvider.writeInfo(infoJson);
 
         Navigator.pop(context);
       },
